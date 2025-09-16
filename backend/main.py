@@ -203,6 +203,24 @@ async def get_stats_summary():
         yesterday_users_result = execute_query(yesterday_users_query)
         yesterday_new_users = yesterday_users_result[0]['yesterday_new'] if yesterday_users_result else 0
         
+        # 周新增用户 (最近7天)
+        week_new_users_query = """
+        SELECT COUNT(*) as week_new 
+        FROM users 
+        WHERE DATE(create_time) >= CURRENT_DATE - INTERVAL '7 days'
+        """
+        week_new_users_result = execute_query(week_new_users_query)
+        week_new_users = week_new_users_result[0]['week_new'] if week_new_users_result else 0
+        
+        # 月新增用户 (最近30天)
+        month_new_users_query = """
+        SELECT COUNT(*) as month_new 
+        FROM users 
+        WHERE DATE(create_time) >= CURRENT_DATE - INTERVAL '30 days'
+        """
+        month_new_users_result = execute_query(month_new_users_query)
+        month_new_users = month_new_users_result[0]['month_new'] if month_new_users_result else 0
+        
         # 今日活跃用户
         today_active_query = """
         SELECT COUNT(DISTINCT user_id) as today_active 
@@ -221,14 +239,34 @@ async def get_stats_summary():
         yesterday_active_result = execute_query(yesterday_active_query)
         yesterday_active_users = yesterday_active_result[0]['yesterday_active'] if yesterday_active_result else 0
         
+        # 周活跃用户 (最近7天)
+        week_active_query = """
+        SELECT COUNT(DISTINCT user_id) as week_active 
+        FROM user_logs 
+        WHERE DATE(created_at) >= CURRENT_DATE - INTERVAL '7 days'
+        """
+        week_active_result = execute_query(week_active_query)
+        week_active_users = week_active_result[0]['week_active'] if week_active_result else 0
+        
+        # 月活跃用户 (最近30天)
+        month_active_query = """
+        SELECT COUNT(DISTINCT user_id) as month_active 
+        FROM user_logs 
+        WHERE DATE(created_at) >= CURRENT_DATE - INTERVAL '30 days'
+        """
+        month_active_result = execute_query(month_active_query)
+        month_active_users = month_active_result[0]['month_active'] if month_active_result else 0
+        
         return {
             "total_users": total_users,
             "today_new_users": today_new_users,
             "yesterday_new_users": yesterday_new_users,
+            "week_new_users": week_new_users,
+            "month_new_users": month_new_users,
             "today_active_users": today_active_users,
             "yesterday_active_users": yesterday_active_users,
-            "new_user_growth_rate": round((today_new_users - yesterday_new_users) / max(yesterday_new_users, 1) * 100, 2) if yesterday_new_users > 0 else 0,
-            "active_user_growth_rate": round((today_active_users - yesterday_active_users) / max(yesterday_active_users, 1) * 100, 2) if yesterday_active_users > 0 else 0
+            "week_active_users": week_active_users,
+            "month_active_users": month_active_users
         }
         
     except Exception as e:
