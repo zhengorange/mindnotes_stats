@@ -22,13 +22,13 @@ def main():
     
     # 启动服务器
     print("启动MindNotes统计服务器...")
-    print("前端访问地址: http://localhost:8000")
-    print("API文档地址: http://localhost:8000/docs")
+    # print("前端访问地址: http://localhost:23789")
+    # print("API文档地址: http://localhost:23789/docs")
     
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=8000,
+        port=23789,
         reload=True,
         app_dir=backend_dir
     )

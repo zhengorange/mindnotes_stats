@@ -78,8 +78,6 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 后端服务将在 http://localhost:8000 启动
-- API文档: http://localhost:8000/docs
-- 交互式API文档: http://localhost:8000/redoc
 
 ### 4. 前端设置
 

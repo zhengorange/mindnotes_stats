@@ -253,7 +253,3 @@ async def catch_all(path: str):
         return FileResponse(index_file)
     else:
         raise HTTPException(status_code=404, detail="Page not found")
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
